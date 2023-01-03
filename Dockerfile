@@ -15,6 +15,9 @@ RUN apk update \
     postgresql-client \
     coreutils \
     tzdata \
+    zip \
+    postgis \
+    gdal-tools \
     && rm -rf /var/cache/apk/*
 
 # define the timezone to run cron
