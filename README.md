@@ -63,7 +63,16 @@ TABLE_TYPE='BASE TABLE'
 #TABLE_TYPE='VIEW'
 ```
 
-If you need to change these values, rebuilding the docker image is mandatory.
+If you need to change these values, create a new file called "exportconf" inside the config directory and put the KVP that you want overwrite.
+
+ - /data/config/exportconf
+
+Same location used to put the host configuration file, like described in "SGDB hosts configuration" session.
+
+```sh
+# KVP example to avoid making valid geometries
+FIX="no"
+```
 
 ## Build image
 

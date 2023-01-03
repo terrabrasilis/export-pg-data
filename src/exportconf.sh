@@ -26,5 +26,7 @@ SCHEMA="public"
 TABLE_TYPE='BASE TABLE'
 #TABLE_TYPE='VIEW'
 #
-# get overwrite parameter values
-source ${DATA_DIR}/config/exportconf
+# get overwrite parameter values if exists file
+if [[ -f "${DATA_DIR}/config/exportconf" ]]; then
+    source ${DATA_DIR}/config/exportconf
+fi;
