@@ -25,3 +25,6 @@ SCHEMA="public"
 # to read the tables or views from selected schema
 TABLE_TYPE='BASE TABLE'
 #TABLE_TYPE='VIEW'
+#
+# get overwrite parameter values
+source ${DATA_DIR}/config/exportconf
