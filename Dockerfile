@@ -24,13 +24,14 @@ ENV TZ=America/Sao_Paulo
 ENV INSTALL_PATH /usr/local
 ENV SHARED_DIR /data
 
+COPY ./*.sh ${INSTALL_PATH}/
+
 ## THE ENV VARS ARE NOT READED INSIDE A SHELL SCRIPT THAT RUNS IN CRON TASKS.
 ## SO, WE WRITE INSIDE THE /etc/environment FILE AND READS BEFORE RUN THE SCRIPT.
 RUN echo "export SHARED_DIR=\"${SHARED_DIR}\"" >> /etc/environment \
     && echo "export INSTALL_PATH=\"${INSTALL_PATH}\"" >> /etc/environment \
-    && echo "export TZ=America/Sao_Paulo" >> /etc/environment
-
-COPY ./*.sh ${INSTALL_PATH}/
+    && echo "export TZ=America/Sao_Paulo" >> /etc/environment \
+    && chmod +x ${INSTALL_PATH}/*.sh
 
 # expose shared dir
 VOLUME ["${SHARED_DIR}"]
