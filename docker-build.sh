@@ -4,7 +4,7 @@ VERSION=$(git describe --tags --abbrev=0)
 export VERSION
 
 # build all images
-docker build -t terrabrasilis/export-pg-data:$VERSION --build-arg VERSION=$VERSION -f Dockerfile ./src
+docker build -t terrabrasilis/export-pg-data:$VERSION -f Dockerfile ./src
 
 # send to dockerhub
 echo "The building was finished! Do you want sending this new image to Docker HUB? Type yes to continue." ; read SEND_TO_HUB
