@@ -2,10 +2,6 @@
 # if you want filter, set the tables names into FILTER variable below and removing the character # to uncomment that.
 # FILTER=("table_name_a" "table_name_b" "table_name_c")
 #
-# Set the output directory for database
-OUTPUT_DATA="${OUTPUT_DATA}/${database}"
-#
-#
 # Remove the output files after ZIP
 RM_OUT="yes"
 #
@@ -28,5 +24,5 @@ TABLE_TYPE='BASE TABLE'
 #
 # get overwrite parameter values if exists file
 if [[ -f "${DATA_DIR}/config/exportconf" ]]; then
-    source ${DATA_DIR}/config/exportconf
+    source "${DATA_DIR}/config/exportconf"
 fi;

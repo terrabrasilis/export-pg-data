@@ -12,26 +12,25 @@ SQL_TABLES="${SQL_TABLES} and table_type = '${TABLE_TYPE}' and table_name NOT IN
 TABLES=($(${PG_BIN}/psql ${DB_CON} -t -c "${SQL_TABLES}"))
 
 fix_geom(){
-    echo "run the geometry fix query"
     TB="$1"
     SQL="UPDATE ${TB} SET geom=ST_MakeValid(geom) WHERE NOT ST_IsValid(geom);"
     if [[ "${FIX}" = "yes" ]]; then
+        echo "run the geometry fix query"
         ${PG_BIN}/psql ${DB_CON} -t -c "${SQL}"
-    fi
+    fi;
 }
 
 export_shp(){
-    echo "run SHP exportation function"
     SQL="$1"
     TB="$2"
     if [[ "${SHP}" = "yes" ]]; then
+        echo "run SHP exportation function"
         pgsql2shp -k -f "${OUTPUT_DATA}/${TB}" -h ${host} -p ${port} -u ${user} ${database} "${SQL}"
         zip -j "${OUTPUT_DATA}/${TB}.zip" "${OUTPUT_DATA}/${TB}.shp" "${OUTPUT_DATA}/${TB}.shx" "${OUTPUT_DATA}/${TB}.prj" "${OUTPUT_DATA}/${TB}.dbf" "${OUTPUT_DATA}/${TB}.cpg"
-    fi
+    fi;
 }
 
 export_gpkg(){
-    echo "run GPKG exportation function"
     # https://gis.stackexchange.com/questions/327958/ogr2ogr-write-multiple-layers-to-one-geopackage
     # https://gdal.org/programs/ogr2ogr.html#cmdoption-ogr2ogr-update
     # -append (insert new data to the same layer)(insere novos dados na mesma camada) 
@@ -41,6 +40,7 @@ export_gpkg(){
     FNAME="${TB}"
     CONN="host=${host} dbname=${database} port=${port} user=${user} password=${password}"
     if [[ "$GPKG" = "yes" ]]; then
+        echo "run GPKG exportation function"
         if [[ "$SAME_FILE" = "yes" ]]; then
             FNAME="${database}"
             if [[ -f "${OUTPUT_DATA}/${FNAME}.gpkg" ]]; then
@@ -52,7 +52,7 @@ export_gpkg(){
             ogr2ogr -f "GPKG" ${OUTPUT_DATA}/${FNAME}.gpkg -nln "${TB}" PG:"${CONN}" -sql "${SQL}" 
         fi;
         zip -j "${OUTPUT_DATA}/${FNAME}.gpkg.zip" ${OUTPUT_DATA}/${FNAME}.gpkg
-    fi
+    fi;
 }
 
 # base query....
@@ -68,18 +68,17 @@ do
     echo "Do for ${TABLE} table..."
 
     DATA_QUERY="SELECT ${COLUMNS} FROM ${SCHEMA}.${TABLE}"
-    TB_NAME="${SCHEMA}.${TABLE}"
     if [[ ${#FILTER[@]} -gt 0 ]]; then
         echo "Has filter by table name"
         if [[ " ${FILTER[@]} " =~ " ${TABLE} " ]]; then
-            fix_geom "${TB_NAME}"
-            export_shp "${DATA_QUERY}" "${TB_NAME}"
-            export_gpkg "${DATA_QUERY}" "${TB_NAME}"
+            fix_geom "${TABLE}"
+            export_shp "${DATA_QUERY}" "${TABLE}"
+            export_gpkg "${DATA_QUERY}" "${TABLE}"
         fi
     else
-        fix_geom "${TB_NAME}"
-        export_shp "${DATA_QUERY}" "${TB_NAME}"
-        export_gpkg "${DATA_QUERY}" "${TB_NAME}"
+        fix_geom "${TABLE}"
+        export_shp "${DATA_QUERY}" "${TABLE}"
+        export_gpkg "${DATA_QUERY}" "${TABLE}"
     fi
 done
 
