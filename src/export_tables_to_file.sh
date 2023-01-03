@@ -3,12 +3,16 @@
 # load exporting configurations
 . ./exportconf.sh
 
+# redefine for each db
+DB_CON="-d ${database} ${PG_CON}"
+
 SQL_TABLES="select table_name from information_schema.tables where table_schema = '${SCHEMA}'"
 SQL_TABLES="${SQL_TABLES} and table_type = '${TABLE_TYPE}' and table_name NOT IN ('geometry_columns','geography_columns','spatial_ref_sys');"
 
 TABLES=($(${PG_BIN}/psql ${DB_CON} -t -c "${SQL_TABLES}"))
 
 fix_geom(){
+    echo "run the geometry fix query"
     TB="$1"
     SQL="UPDATE ${TB} SET geom=ST_MakeValid(geom) WHERE NOT ST_IsValid(geom);"
     if [[ "${FIX}" = "yes" ]]; then
@@ -17,6 +21,7 @@ fix_geom(){
 }
 
 export_shp(){
+    echo "run SHP exportation function"
     SQL="$1"
     TB="$2"
     if [[ "${SHP}" = "yes" ]]; then
@@ -26,6 +31,7 @@ export_shp(){
 }
 
 export_gpkg(){
+    echo "run GPKG exportation function"
     # https://gis.stackexchange.com/questions/327958/ogr2ogr-write-multiple-layers-to-one-geopackage
     # https://gdal.org/programs/ogr2ogr.html#cmdoption-ogr2ogr-update
     # -append (insert new data to the same layer)(insere novos dados na mesma camada) 
@@ -59,6 +65,8 @@ fi;
 
 for TABLE in ${TABLES[@]}
 do
+    echo "Do for ${TABLE} table..."
+
     DATA_QUERY="SELECT ${COLUMNS} FROM ${SCHEMA}.${TABLE}"
     TB_NAME="${SCHEMA}.${TABLE}"
     if [[ ${#FILTER[@]} -gt 0 ]]; then
@@ -75,7 +83,7 @@ do
     fi
 done
 
-# remove intermediate files
+echo "remove intermediate files"
 if [[ "${RM_OUT}" = "yes" ]]; then
     if [[ "${SHP}" = "yes" ]]; then
         rm -f ${OUTPUT_DATA}/*.{shp,shx,prj,dbf,cpg}
