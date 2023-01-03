@@ -1,0 +1,16 @@
+
+version: '2'
+
+services:
+  export-pg:
+    image: 'terrabrasilis/export-pg-data:v1.0.0'
+    container_name: export-pg
+    restart: "no"
+    volumes:
+      - '/main/storage:/data'
+    networks:
+      - proxy_default
+
+networks:
+  proxy_default:
+    external: true
