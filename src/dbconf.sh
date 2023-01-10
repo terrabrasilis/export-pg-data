@@ -8,7 +8,11 @@ then
   PG_CON="-U ${user} -h ${host} -p ${port}"
   #
   # filter only database of db name ilike with...for get_databases.sh script
-  DB_NAME_LIKE="prodes_%"
+  if [[ ! "${filter_dbs_by_name}" = "" ]]; then
+    DB_NAME_LIKE="${filter_dbs_by_name}"
+  else
+    DB_NAME_LIKE="prodes_%"
+  fi;
 else
   echo "Missing Postgres config file."
   exit

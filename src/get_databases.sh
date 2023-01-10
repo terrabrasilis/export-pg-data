@@ -1,11 +1,11 @@
 #!/bin/bash
 #
-# Used to load database configs.
+# Used to load database host configs.
 #
 CONF_FILE=${1}
 DATA_DIR=${2}
 INSTALL_PATH=${3}
-echo "load settings to the each SGDB host."
+echo "load settings to the SGDB host."
 . "${INSTALL_PATH}/dbconf.sh" "$DATA_DIR/config/$CONF_FILE"
 
 ACT_DATE=$(date '+%d-%m-%Y')

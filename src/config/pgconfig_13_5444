@@ -2,3 +2,4 @@ user="postgres"
 host="192.168.0.108"
 port=5444
 password="postgres"
+filter_dbs_by_name="prodes_cerrado%"
