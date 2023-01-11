@@ -17,3 +17,10 @@ SCHEMA="public"
 # to read the tables or views from selected schema
 TABLE_TYPE='BASE TABLE'
 #TABLE_TYPE='VIEW'
+#
+# use table suffix in where clause on ILIKE?
+# so, type a word. if blank, it is ignored.
+TABLE_SUFFIX="biome"
+# should the results only have tables with the suffix or ignore tables with the suffix?
+# yes to skip tables or any word to get only tables with suffixes
+AVOID_TABLE_SUFFIX="yes"

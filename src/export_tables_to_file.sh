@@ -6,6 +6,14 @@
 # redefine for each db
 DB_CON="-d ${database} ${PG_CON}"
 
+if [[ ! "${TABLE_SUFFIX}" = "" ]]; then
+    SQL_NOT=""
+    if [[ "${AVOID_TABLE_SUFFIX}" = "yes" ]]; then
+        SQL_NOT="NOT"
+    fi;
+    SQL_AND=" AND ${SQL_NOT} table_name ILIKE '%${TABLE_SUFFIX}'"
+fi;
+
 SQL_TABLES="select table_name from information_schema.tables where table_schema = '${SCHEMA}'"
 SQL_TABLES="${SQL_TABLES} and table_type = '${TABLE_TYPE}' and table_name NOT IN ('geometry_columns','geography_columns','spatial_ref_sys');"
 
