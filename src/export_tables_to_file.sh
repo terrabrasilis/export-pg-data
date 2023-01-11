@@ -15,7 +15,7 @@ if [[ ! "${TABLE_SUFFIX}" = "" ]]; then
 fi;
 
 SQL_TABLES="select table_name from information_schema.tables where table_schema = '${SCHEMA}'"
-SQL_TABLES="${SQL_TABLES} and table_type = '${TABLE_TYPE}' and table_name NOT IN ('geometry_columns','geography_columns','spatial_ref_sys');"
+SQL_TABLES="${SQL_TABLES} and table_type = '${TABLE_TYPE}' and table_name NOT IN ('geometry_columns','geography_columns','spatial_ref_sys') ${SQL_AND};"
 
 TABLES=($(${PG_BIN}/psql ${DB_CON} -t -c "${SQL_TABLES}"))
 
