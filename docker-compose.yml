@@ -3,7 +3,7 @@ version: '2'
 
 services:
   export-pg:
-    image: 'terrabrasilis/export-pg-data:v1.0.2'
+    image: 'terrabrasilis/export-pg-data:v1.0.3'
     container_name: export-pg
     restart: "no"
     volumes:
